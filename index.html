@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" href="/favicon-32x32.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mastermind Simulator</title>
+</head>
+<body>
+    <header>Simulation:</header>
+    <header id="indicator"></header>
+    <header id="indicatoror"></header>
+    <header id="indicatorMinimax"></header>
+    <header id="indicatorMinimaxSimple"></header>
+    <button type="button" onclick="startWorkerer()">Possible answers guessing</button>
+    <!--<button type="button" onclick="startWorker()">Pattern guessing</button>-->
+    <button type="button" onclick="startWorkerMinimax()">Minimax</button>
+    <button type="button" onclick="stopAll()">Stop</button>
+    <script>
+
+        console.log('simulation started')
+        var w;
+
+        function startWorker() {
+            if (typeof (Worker) !== "undefined") {
+                if (typeof (w) == "undefined") {
+                    w = new Worker("worker.js");
+                }
+                w.onmessage = function (event) {
+                    document.getElementById("indicator").innerHTML = event.data;
+                };
+            } else {
+                document.getElementById("indicator").innerHTML = "Sorry, your browser does not support Web Workers...";
+            }
+        }
+
+
+        var ww;
+
+        function startWorkerer() {
+            if (typeof (Worker) !== "undefined") {
+                if (typeof (ww) == "undefined") {
+                    ww = new Worker("workerer.js");
+                }
+                ww.onmessage = function (event) {
+                    document.getElementById("indicatoror").innerHTML = event.data;
+                };
+            } else {
+                document.getElementById("indicatoror").innerHTML = "Sorry, your browser does not support Web Workers...";
+            }
+        }
+
+
+
+        var www;
+
+        function startWorkerMinimax() {
+            if (typeof (Worker) !== "undefined") {
+                if (typeof (www) == "undefined") {
+                    www = new Worker("workerMinimax.js");
+                }
+                www.onmessage = function (event) {
+                    document.getElementById("indicatorMinimax").innerHTML = event.data;
+                };
+            } else {
+                document.getElementById("indicatorMinimax").innerHTML = "Sorry, your browser does not support Web Workers...";
+            }
+        }
+
+        function stopAll() {
+            if (www) {
+                www.terminate();
+                www = undefined;
+            }
+            if (ww) {
+                ww.terminate();
+                ww = undefined;
+            }
+            if (w) {
+                w.terminate();
+                w = undefined;
+            }
+        }
+
+    </script>
+</body>
+</html>
